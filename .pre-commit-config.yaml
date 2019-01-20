@@ -1,0 +1,27 @@
+# 'pre-commit' manages the installation and execution of any hook written in any language before every commit. For more information see here: http://pre-commit.com.
+#
+###############################
+# Steps:
+#  `pip install pre-commit`
+#  `pre-commit install`
+###############################
+
+# remove tabs and crlf line endings
+-   repo: git://github.com/Lucas-C/pre-commit-hooks
+    sha: v1.0.1
+    hooks:
+    -   id: remove-tabs
+    -   id: remove-crlf
+
+# format files with ClangFormat
+-   repo: git://github.com/doublify/pre-commit-clang-format
+    sha: master
+    hooks:
+    -   id: clang-format
+        exclude_types: ['javascript', 'ts']
+
+# pre-commit hook to remove trailing-whitespace #
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    sha: v0.9.1
+    hooks:
+    -   id: trailing-whitespace
