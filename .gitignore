@@ -1,0 +1,89 @@
+# MacOS
+.DS_Store
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*.pyc
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+
+__pycache__/
+3rdParty/
+build*/
+CMakeFiles*/
+x64*/
+.vs*/
+bin*/
+lib*/
+Testing*/
+conaninfo*
+ignore/
+*.vcxproj
+
+ALL_BUILD\.vcxproj\.filters
+
+*.cmake
+
+CMakeCache\.txt
+
+conan_imports_manifest\.txt
+
+*.filters
+
+*.db
+
+conanbuildinfo\.txt
+
+*.sln
+
+*.bak
+
+output.txt
+console_log.txt
+*.log
+
+ppm-ui/logger.log
+
+# Code Generated files
+ppm-cpp/include/Ppm/Constants.h
+ppm-cpp/include/Ppm/Schemas/
+ppm-cpp/include/Ppm/Settings
+ppm-cpp/include/Ppm/Settings/
+ppm-cpp/include/Ppm/Snapshots/
+ppm-cpp/src/Ppm/Settings/
+ppm-node/js-lib/Snapshots/
+
+# Preset files until we have actual presets
+*.scp
+*.sgen
+.idea/
+*Resource.txt
+
+# QT Creator IDE files
+ppm.config
+ppm.creator
+ppm.creator.user
+ppm.files
+ppm.includes
