@@ -14,6 +14,7 @@ function copyToClipboard(text) {
         document.body.appendChild(textarea);
         textarea.select();
         try {
+
             console.log("copying", document.execCommand("copy"));  // Security exception may be thrown by some browsers.
         } catch (ex) {
             console.warn("Copy to clipboard failed.", ex);
@@ -25,29 +26,21 @@ function copyToClipboard(text) {
 }
 
 function selectText(containerid) {
-    if (document.selection) { // IE
-        var range = document.body.createTextRange();
-        range.moveToElementText(document.getElementsByClassName(containerid)[0]);
-        range.select();
 
-        var successful = document.execCommand('copy');
-        var msg = successful ? 'successful' : 'unsuccessful';
-        console.log('Fallback: Copying text command was ' + msg);
-    } else if (window.getSelection) {
-        console.log('here')
+    var iframe = document.querySelector("iframe");
+    var innerDoc = iframe.contentWindow.document;
 
 
-        var selection = document.getSelection();
-        var range = document.createRange();
+    var selection = innerDoc.getSelection();
+    var range = innerDoc.createRange();
 //  range.selectNodeContents(textarea);
-        range.selectNode(document.getElementsByClassName(containerid)[0]);
-        selection.removeAllRanges();
-        selection.addRange(range);
+    range.selectNode(iframe.contentWindow.document.getElementsByClassName(containerid)[0]);
+    selection.removeAllRanges();
+    selection.addRange(range);
 
-        //copyToClipboard(selection.toString());
-        console.log('copy success', document.execCommand('copy'));
-        selection.removeAllRanges();
-    }
+    console.log('copy success', innerDoc.execCommand('copy'));
+    console.log(selection);
+    selection.removeAllRanges();
 }
 
 
@@ -77,73 +70,94 @@ var addNextPageButton = function () {
     var content = document.getElementById("sbo-rt-content");
     var nextLink = document.querySelectorAll(".next,.nav-link")[0];
 
-    //content.insertBefore(button, content.firstChild)
-    //content.appendChild(button);
-
-
 // 3. Add event handler
     button.addEventListener("click", function () {
-        console.log(nextLink.href);
+        var nextLink = document.querySelectorAll(".next,.nav-link")[0];
         location.href = nextLink.href;
     });
     //},1000)
 };
 
-
 (function () {
 
+    var docIframe = function () {
+        var iframe = document.createElement("iframe");
+        iframe.src = document.location;
+        var content = document.getElementById("sbo-rt-content");
+        content.insertBefore(iframe, content.firstChild)
 
-    var addCopyButton = function () {
-//setTimeout(function(){
+        iframe.addEventListener("load", function () {
+            navigator.clipboard.writeText("loaded").then(()=>{
+                console.log("loaded copied to clipboard");
+            })
+        })
+    }
+
+
+    var addCopyButton = function (name, func) {
         var button = document.createElement("button");
-        button.innerHTML = "Copy";
-        button.id = "btnCopy";
+        button.innerHTML = name;
         var content = document.getElementById("sbo-rt-content");
         //content.insertBefore(button, content.childNodes[0])
         content.insertBefore(button, content.firstChild)
         //content.appendChild(button);
+        button.addEventListener("click", func);
 
-// 3. Add event handler
-        button.addEventListener("click", function () {
-            selectText('annotator-wrapper')
-         });
-        //},1000)
     };
+
+    var nextButtonListener = function () {
+
+        var iframe = document.querySelector("iframe");
+        var innerDoc = iframe.contentWindow.document;
+
+        var nextLink = innerDoc.querySelector("div.sbo-next a.next");
+        var iframe = document.querySelector("iframe");
+        setTimeout(function () {
+            iframe.src = nextLink.href;
+        },4000)
+    };
+
+
+    var copyButtonListener = function () {
+
+        selectText('annotator-wrapper')
+
+    }
+
 
     var simulateClick = function () {
         var button = document.getElementById("btnCopy");
         button.click();
     }
 
-
-    /*
-  setInterval(function () {
-
-      console.log('executing');
-      var nextLink = document.querySelectorAll(".next,.nav-link")[0];
-      nextLink.click();
-      //location.href = nextLink.href;
-
-  }, 1000);
-  */
-    //console.log('executing');
-
     var imported = document.createElement('script');
     imported.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js';
     document.head.appendChild(imported);
 
     setTimeout(function () {
+        docIframe();
+        addCopyButton("Next", nextButtonListener);
+        addCopyButton("Copy", copyButtonListener);
+    }, 400)
 
-        addCopyButton();
-        console.log("simulating");
-        $("#btnCopy").trigger("click");
-    }, 1000)
-    //var button = document.getElementById("btnCopy");
-    //button.click();
-    //addNextPageButton();
+    /*
+    setInterval(function () {
+        navigator.clipboard.readText()
+            .then(text => {
+                if(text==='done!')
+                {
+                    console.log('pasted done!');
 
-    //selectText('annotator-wrapper')
-
+                }
+                else {
+                    console.log('still not finished yet');
+                }
+            })
+            .catch(err => {
+                console.error('Failed to read clipboard contents: ', err);
+            });
+    }, 2000);
+    */
 
 })();
 
