@@ -83,7 +83,7 @@ var addNextPageButton = function () {
 
 // 3. Add event handler
     button.addEventListener("click", function () {
-        console.log(nextLink.href);
+        var nextLink = document.querySelectorAll(".next,.nav-link")[0];
         location.href = nextLink.href;
     });
     //},1000)
@@ -93,58 +93,44 @@ var addNextPageButton = function () {
 (function () {
 
 
-    var addCopyButton = function () {
-//setTimeout(function(){
+    var addCopyButton = function (name, func) {
         var button = document.createElement("button");
-        button.innerHTML = "Copy";
-        button.id = "btnCopy";
+        button.innerHTML = name;
         var content = document.getElementById("sbo-rt-content");
         //content.insertBefore(button, content.childNodes[0])
         content.insertBefore(button, content.firstChild)
         //content.appendChild(button);
+        button.addEventListener("click", func);
 
-// 3. Add event handler
-        button.addEventListener("click", function () {
-            selectText('annotator-wrapper')
-         });
-        //},1000)
     };
+
+    var nextButtonListener = function () {
+        //var nextLink = document.querySelectorAll(".next, .nav-link")[0];
+        var nextLink = document.querySelector("div.sbo-next a.next");
+        windows.location.pathname = nextLink.href;
+    };
+
+
+    var copyButtonListener = function () {
+        selectText('annotator-wrapper')
+
+        var nextLink = document.querySelector("div.sbo-next a.next");
+        location.href = nextLink.href;
+    }
+
 
     var simulateClick = function () {
         var button = document.getElementById("btnCopy");
         button.click();
     }
 
-
-    /*
-  setInterval(function () {
-
-      console.log('executing');
-      var nextLink = document.querySelectorAll(".next,.nav-link")[0];
-      nextLink.click();
-      //location.href = nextLink.href;
-
-  }, 1000);
-  */
-    //console.log('executing');
-
     var imported = document.createElement('script');
     imported.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js';
     document.head.appendChild(imported);
 
     setTimeout(function () {
-
-        addCopyButton();
-        console.log("simulating");
-        $("#btnCopy").trigger("click");
-    }, 1000)
-    //var button = document.getElementById("btnCopy");
-    //button.click();
-    //addNextPageButton();
-
-    //selectText('annotator-wrapper')
-
-
+        addCopyButton("Copy", copyButtonListener);
+    }, 400)
 })();
 
 
